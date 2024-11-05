@@ -23,6 +23,10 @@ class EnvironmentVariablesValidator {
   @IsOptional()
   NODE_ENV: Environment;
 
+  @IsBoolean()
+  @IsOptional()
+  IS_HTTPS: boolean;
+
   @IsString()
   @IsNotEmpty()
   APP_NAME: string;
@@ -54,6 +58,10 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   APP_FALLBACK_LANGUAGE: string;
+
+  @IsBoolean()
+  @IsOptional()
+  APP_LOGGING: boolean;
 
   @IsString()
   @IsOptional()
@@ -88,13 +96,15 @@ export function getConfig(): AppConfig {
       : 3000;
 
   return {
-    nodeEnv: process.env.NODE_ENV || Environment.DEVELOPMENT,
+    nodeEnv: (process.env.NODE_ENV || Environment.DEVELOPMENT) as Environment,
+    isHttps: process.env.IS_HTTPS === 'true',
     name: process.env.APP_NAME,
     url: process.env.APP_URL || `http://localhost:${port}`,
     port,
     debug: process.env.APP_DEBUG === 'true',
     apiPrefix: process.env.API_PREFIX || 'api',
     fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
+    appLogging: process.env.APP_LOGGING === 'true',
     logLevel: process.env.APP_LOG_LEVEL || 'warn',
     logService: process.env.APP_LOG_SERVICE || LogService.CONSOLE,
     corsOrigin: getCorsOrigin(),

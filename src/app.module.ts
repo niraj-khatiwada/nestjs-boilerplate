@@ -20,6 +20,7 @@ import {
 } from 'nestjs-i18n';
 import { LoggerModule } from 'nestjs-pino';
 
+import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { ApiModule } from './api/api.module';
 import { BackgroundModule } from './background/background.module';
 import bullConfig from './background/queues/bull.config';
@@ -44,6 +45,11 @@ import { default as useThrottlerFactory } from './tools/throttler/throttler.fact
         bullConfig,
       ],
       envFilePath: ['.env'],
+    }),
+    GracefulShutdownModule.forRoot({
+      cleanup: (...args) => {
+        console.log('App shutting down...', args);
+      },
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],

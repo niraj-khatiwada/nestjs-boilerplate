@@ -10,7 +10,10 @@
 - [x] REST & Graphql API
 - [x] Swagger and API versioning for REST API
 - [x] BullMQ for queue
+- [x] Caching using Redis
 - [x] Pino for logging
+- [x] Rate Limiter using Redis
+- [x] Graceful Shutdown
 - [x] Testing with Jest
 - [x] pnpm
 - [x] Docker

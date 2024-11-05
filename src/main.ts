@@ -14,8 +14,10 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import helmet from 'helmet';
+import { setupGracefulShutdown } from 'nestjs-graceful-shutdown';
 
 import { AppModule } from './app.module';
+import { getConfig } from './config/app.config';
 import { type AllConfigType } from './config/config.type';
 import { consoleLoggingConfig } from './tools/logger/logger-factory';
 import setupSwagger from './tools/swagger/setup-swagger';
@@ -27,9 +29,14 @@ async function bootstrap() {
     test: false,
   } as const;
 
+  const appConfig = getConfig();
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: envToLogger[process.env.NODE_ENV] ?? true }),
+    new FastifyAdapter({
+      logger: appConfig.appLogging ? envToLogger[appConfig.nodeEnv] : false,
+      trustProxy: appConfig.isHttps,
+    }),
     {
       bufferLogs: true,
     },
@@ -84,6 +91,10 @@ async function bootstrap() {
 
   if (isDevelopment) {
     setupSwagger(app);
+  }
+
+  if (!isDevelopment) {
+    setupGracefulShutdown({ app });
   }
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
