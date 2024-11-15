@@ -25,6 +25,7 @@ function useGraphqlFactory(
       }
       return err;
     },
+    context: (request, reply) => ({ request, reply }),
   };
 }
 

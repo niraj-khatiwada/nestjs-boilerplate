@@ -14,7 +14,7 @@
 - [x] BullMQ for Queues
 - [x] Caching using Redis
 - [x] Pino for Logging
-- [x] Rate Limiter using Redis
+- [x] Rate Limiter using Redis for both REST & GraphQL
 - [x] Graceful Shutdown
 - [x] File Uploads
 - [x] Sentry

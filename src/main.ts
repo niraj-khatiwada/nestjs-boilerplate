@@ -105,9 +105,9 @@ async function bootstrap() {
       `:${configService.get('app.websocketPort', { infer: true })}`,
     );
   // eslint-disable-next-line no-console
-  console.info(`Server running at ${httpUrl}`);
+  console.info('\x1b[36m%s\x1b[0m', `Server running at ${httpUrl}`);
   // eslint-disable-next-line no-console
-  console.info(`Websocket server running at ${wsUrl}`);
+  console.info('\x1b[36m%s\x1b[0m', `Websocket server running at ${wsUrl}`);
 
   return app;
 }

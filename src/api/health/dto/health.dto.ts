@@ -4,7 +4,7 @@ import {
   HealthCheckStatus,
   HealthIndicatorResult,
 } from '@nestjs/terminus';
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 
 export class HealthCheckDto implements HealthCheckResult {

@@ -16,6 +16,7 @@ export type AppConfig = {
   logService: string;
   corsOrigin: boolean | string | RegExp | (string | RegExp)[];
   throttle: {
+    enabled: boolean;
     limit: number;
     ttl: number;
   };

@@ -10,7 +10,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AcceptLanguageResolver,
@@ -20,7 +20,6 @@ import {
 } from 'nestjs-i18n';
 import { LoggerModule } from 'nestjs-pino';
 
-import { FastifyAdapter } from '@bull-board/fastify';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { ApiModule } from './api/api.module';
 import { BackgroundModule } from './background/background.module';
@@ -33,6 +32,7 @@ import { GatewayModule } from './shared/gateway/gateway.module';
 import useCacheFactory from './tools/cache/cache.factory';
 import { default as useLoggerFactory } from './tools/logger/logger-factory';
 import sentryConfig from './tools/sentry/sentry.config';
+import { AppThrottlerGuard } from './tools/throttler/app-throttler.guard';
 import { default as useThrottlerFactory } from './tools/throttler/throttler.factory';
 
 @Module({
@@ -105,7 +105,7 @@ import { default as useThrottlerFactory } from './tools/throttler/throttler.fact
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: AppThrottlerGuard,
     },
   ],
 })

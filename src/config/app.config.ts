@@ -86,6 +86,10 @@ class EnvironmentVariablesValidator {
   @IsOptional()
   APP_CORS_ORIGIN: string;
 
+  @IsBoolean()
+  @IsOptional()
+  THROTTLER_ENABLED: boolean;
+
   @IsNumber()
   @IsOptional()
   THROTTLE_LIMIT: number;
@@ -102,6 +106,7 @@ export function getConfig(): AppConfig {
     ? parseInt(process.env.WEBSOCKET_PORT, 10)
     : port - 1;
 
+  const isThrottlingEnabled = process.env.THROTTLER_ENABLED === 'true';
   return {
     nodeEnv: (process.env.NODE_ENV || Environment.DEVELOPMENT) as Environment,
     isHttps: process.env.IS_HTTPS === 'true',
@@ -118,8 +123,13 @@ export function getConfig(): AppConfig {
     logService: process.env.APP_LOG_SERVICE || LogService.CONSOLE,
     corsOrigin: getCorsOrigin(),
     throttle: {
-      limit: Number.parseInt(process.env.THROTTLE_LIMIT),
-      ttl: seconds(Number.parseInt(process.env.THROTTLE_TTL)),
+      enabled: isThrottlingEnabled,
+      limit: isThrottlingEnabled
+        ? Number.parseInt(process.env.THROTTLE_LIMIT)
+        : Infinity,
+      ttl: isThrottlingEnabled
+        ? seconds(Number.parseInt(process.env.THROTTLE_TTL))
+        : 0,
     },
   };
 }
